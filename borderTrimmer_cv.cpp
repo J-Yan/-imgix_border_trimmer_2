@@ -13,9 +13,13 @@
 using namespace cv;
 using namespace std;
 
-#define RGB 3
-#define RGBA 4
-#define ONE 1
+// defined const can be overwritten, the compiler won't tell you
+// #define RGB 3
+// #define RGBA 4
+// #define ONE 1
+const int RGB = 3;
+const int RGBA = 4;
+const int ONE = 1;
 
 int channel;
 
@@ -77,7 +81,8 @@ int main( int argc, char** argv ) {
         Mat inImageMat;
 
         const char * ext = read_MIME_type(argv[1]);
-        if(strstr(ext, "png") || strstr(ext, "webp")) {inImageMat = imread( inImage, -1 ); channel = RGBA;}
+        // if(strstr(ext, "png") || strstr(ext, "webp")) {inImageMat = imread( inImage, -1 ); channel = RGBA;}
+        if(strstr(ext, "png") || strstr(ext, "webp")) {inImageMat = imread( inImage, -1 ); }
         else if(strstr(ext, "jpeg")) {inImageMat = imread( inImage, 1 );}
         else {
                 cout << "File format not supported." << endl;

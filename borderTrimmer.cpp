@@ -9,8 +9,11 @@
 #include <jpeglib.h>
 #include <setjmp.h>
 
-#define RGB 3
-#define RGBA 4
+// defined const can be overwritten, the compiler won't tell you
+// #define RGB 3
+// #define RGBA 4
+const int RGB = 3;
+const int RGBA = 4;
 
 int width, height, width_o, height_o, channels;
 const char * type;

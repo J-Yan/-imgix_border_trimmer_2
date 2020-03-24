@@ -29,15 +29,15 @@ In both approaches, use "libmagic" to detect the image type by the magic number 
 #### Trimmed image might have bigger size than original one
 
 ## Test images
-| File Name | Type | Notes | Source |
-| ------ | ------ | ------ | ------ |
-| jpeg_i | jpeg |Created in PS. Border has noise|Taken by myself|
-| jpeg_lr_i | jpeg |Created in PS. Border has noise. Only has left and right borders.|Taken by myself|
-| png_8_i | png8 ||Taken by myself|
-| png_i | png ||Taken by myself|
-| png_RGBA_i | png |Fully transparent border.|Taken by myself|
-| png_up_i | png |Only has top border.|Taken by myself|
-|webP_i|webp|Boder width is 0, don't have tool to edit (can edit it use OpenCV). Take as 0-width border teat case.|From Internet|
+| File Name | Type | OpenCV Mat Type| Notes | Source |
+| ------ | ------ | ------ | ------ | ------ |
+| jpeg_i | jpeg | 8UC3 |Created in PS. Border has noise|Taken by myself|
+| jpeg_lr_i | 8UC3 | jpeg |Created in PS. Border has noise. Only has left and right borders.|Taken by myself|
+| png_8_i | 8UC3 | png8 ||Taken by myself|
+| png_i | png | 16UC4 |Taken by myself|
+| png_RGBA_i | 16UC4 |png |Fully transparent border.|Taken by myself|
+| png_up_i | 16UC4 |png |Only has top border.|Taken by myself|
+|webP_i|webp| 16UC4 | Border width is 0, don't have tool to edit (can edit it use OpenCV). Take as 0-width border teat case.|From Internet|
 
 ## Test case input and output images
 [ origin, lib output, opencv output ]  
@@ -84,6 +84,7 @@ on MacOS
 brew install libmagic
 brew install libpng
 clang++ -lz -lpng16 -lmagic -ljpeg borderTrimmer.cpp
+// (or) g++ -lpng16 -lmagic -ljpeg -std=c++11 borderTrimmer.cpp
 
 ./a.out jpeg_i.jpeg jpeg_o.jpeg
 ./a.out jpeg_lr_i.jpeg jpeg_lr_o.jpeg
