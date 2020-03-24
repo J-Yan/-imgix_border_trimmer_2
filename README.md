@@ -32,11 +32,11 @@ In both approaches, use "libmagic" to detect the image type by the magic number 
 | File Name | Type | OpenCV Mat Type| Notes | Source |
 | ------ | ------ | ------ | ------ | ------ |
 | jpeg_i | jpeg | 8UC3 |Created in PS. Border has noise|Taken by myself|
-| jpeg_lr_i | 8UC3 | jpeg |Created in PS. Border has noise. Only has left and right borders.|Taken by myself|
-| png_8_i | 8UC3 | png8 ||Taken by myself|
+| jpeg_lr_i | jpeg | 8UC3 |Created in PS. Border has noise. Only has left and right borders.|Taken by myself|
+| png_8_i |  png8 ||Taken by myself|
 | png_i | png | 16UC4 |Taken by myself|
-| png_RGBA_i | 16UC4 |png |Fully transparent border.|Taken by myself|
-| png_up_i | 16UC4 |png |Only has top border.|Taken by myself|
+| png_RGBA_i  |png | 16UC4|Fully transparent border.|Taken by myself|
+| png_up_i |png | 16UC4|Only has top border.|Taken by myself|
 |webP_i|webp| 16UC4 | Border width is 0, don't have tool to edit (can edit it use OpenCV). Take as 0-width border teat case.|From Internet|
 
 ## Test case input and output images
