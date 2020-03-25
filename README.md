@@ -78,7 +78,7 @@ png_w_jpeg_ext_i.jpeg
 <img src="https://backto1995.com/temp_img/png_w_jpeg_ext_o.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_w_jpeg_ext_o_cv.png" width="30%"/>  
 
-webP_i.jpeg  
+webP_i.webp  
 <img src="https://backto1995.com/temp_img/webP_i.webp" width="30%"/>
 <img src="https://backto1995.com/temp_img/webP_o.webp" width="30%"/>
 <img src="https://backto1995.com/temp_img/webP_o_cv.webp" width="30%"/>  
