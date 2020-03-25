@@ -11,15 +11,12 @@
 
 #include <magic.h>
 
-using namespace cv;
-using namespace std;
-
-string type2str(int type, int * channel) {
+std::string type2str(int type, int * channel) {
 /*
         code modified from https://stackoverflow.com/questions/10167534/how-to-find-out-what-type-of-a-mat-object-is-with-mattype-in-opencv/39780825
         int type: cv::Mat.type()
 */
-        string r;
+        std::string r;
         uchar depth = type & CV_MAT_DEPTH_MASK; //
         uchar chans = 1 + (type >> CV_CN_SHIFT);  // CV_CN_SHIFT 3
 
@@ -59,7 +56,7 @@ const char * read_MIME_type(char * filename) {
         // image/png
         // image/jpeg
         // image/webp
-        std::printf("【MIME】%s\n", type);
+        printf("【MIME】%s\n", type);
         return type;
 }
 
@@ -70,15 +67,15 @@ int main( int argc, char ** argv ) {
         int channel ;
 
         // read image
-        Mat inImageMat;
+        cv::Mat inImageMat;
 
         const char * ext { read_MIME_type(argv[1]) };
         char * ext2 { strtok((char *)ext, "/;") };
         ext2 = strtok(NULL, "/;");
         printf("【Image type】%s\n", ext2);
-        if((string)ext2 == "png" || (string)ext2 == "webp" || (string)ext2 == "jpeg") {inImageMat = imread( inImage, -1 ); /* -1: cv::IMREAD_UNCHANGED*/}
+        if((std::string)ext2 == "png" || (std::string)ext2 == "webp" || (std::string)ext2 == "jpeg") {inImageMat = cv::imread( inImage, -1 ); /* -1: cv::IMREAD_UNCHANGED*/}
         else {
-                cout << "File format not supported." << endl;
+                std::cout << "File format not supported." << std::endl;
                 abort();
         }
 
@@ -90,7 +87,7 @@ int main( int argc, char ** argv ) {
         // trim process
 
         // check image opencv data type & image size
-        string ty { type2str( inImageMat.type(), &channel) };
+        std::string ty { type2str( inImageMat.type(), &channel) };
         printf("【OpenCV data type】%s\n【size】%dx%d \n-------------------\n【ROI info】\n", ty.c_str(), inImageMat.cols, inImageMat.rows );
 
         int r1, r2, c1, c2;
@@ -101,12 +98,12 @@ int main( int argc, char ** argv ) {
                 for(int x = 0; x < inImageMat.cols; x++) {
                         bool same {true};
                         switch(channel){
-                                case 3: { same = inImageMat.at<Vec3b>(y,x) == inImageMat.at<Vec3b>(0,0); break; }
-                                case 4: { same = inImageMat.at<Vec<uint16_t,4>>(y,x) == inImageMat.at<Vec<uint16_t,4>>(0,0); break; }
+                                case 3: { same = inImageMat.at<cv::Vec3b>(y,x) == inImageMat.at<cv::Vec3b>(0,0); break; }
+                                case 4: { same = inImageMat.at<cv::Vec<uint16_t,4>>(y,x) == inImageMat.at<cv::Vec<uint16_t,4>>(0,0); break; }
                         }
                         if(!same){
                                 r1 = y;
-                                std::printf("top: %d\n", r1);
+                                printf("top: %d\n", r1);
                                 flag = false;
                                 break;
                         }
@@ -118,12 +115,12 @@ int main( int argc, char ** argv ) {
                 for(int x = 0; x < inImageMat.cols; x++) {
                         bool same {true};
                         switch(channel){
-                                case 3: { same = inImageMat.at<Vec3b>(y,x) == inImageMat.at<Vec3b>(0,0); break; }
-                                case 4:  { same = inImageMat.at<Vec<uint16_t,4>>(y,x) == inImageMat.at<Vec<uint16_t,4>>(0,0); break; }
+                                case 3: { same = inImageMat.at<cv::Vec3b>(y,x) == inImageMat.at<cv::Vec3b>(0,0); break; }
+                                case 4:  { same = inImageMat.at<cv::Vec<uint16_t,4>>(y,x) == inImageMat.at<cv::Vec<uint16_t,4>>(0,0); break; }
                         }
                         if(!same){
                                 r2 = y;
-                                std::printf("bottom: %d\n", r2);
+                                printf("bottom: %d\n", r2);
                                 flag = false;
                                 break;
                         }
@@ -135,12 +132,12 @@ int main( int argc, char ** argv ) {
                 for(int y = r1; y <= r2; y++) {
                         bool same = true;
                         switch(channel){
-                                case 3: { same = inImageMat.at<Vec3b>(y,x) == inImageMat.at<Vec3b>(0,0); break; }
-                                case 4:  { same = inImageMat.at<Vec<uint16_t,4>>(y,x) == inImageMat.at<Vec<uint16_t,4>>(0,0); break; }
+                                case 3: { same = inImageMat.at<cv::Vec3b>(y,x) == inImageMat.at<cv::Vec3b>(0,0); break; }
+                                case 4:  { same = inImageMat.at<cv::Vec<uint16_t,4>>(y,x) == inImageMat.at<cv::Vec<uint16_t,4>>(0,0); break; }
                         }
                         if(!same){
                                 c1 = x;
-                                std::printf("left: %d\n", c1);
+                                printf("left: %d\n", c1);
                                 flag = false;
                                 break;
                         }
@@ -152,12 +149,12 @@ int main( int argc, char ** argv ) {
                 for(int y = r1; y <= r2; y++) {
                         bool same = true;
                         switch(channel){
-                                case 3: { same = inImageMat.at<Vec3b>(y,x) == inImageMat.at<Vec3b>(0,0); break; }
-                                case 4:  { same = inImageMat.at<Vec<uint16_t,4>>(y,x) == inImageMat.at<Vec<uint16_t,4>>(0,0); break; }
+                                case 3: { same = inImageMat.at<cv::Vec3b>(y,x) == inImageMat.at<cv::Vec3b>(0,0); break; }
+                                case 4:  { same = inImageMat.at<cv::Vec<uint16_t,4>>(y,x) == inImageMat.at<cv::Vec<uint16_t,4>>(0,0); break; }
                         }
                         if(!same){
                                 c2 = x;
-                                std::printf("right: %d\n", c2);
+                                printf("right: %d\n", c2);
                                 flag = false;
                                 break;
                         }
@@ -167,29 +164,29 @@ int main( int argc, char ** argv ) {
 
         // initial out image mat
         int h = r2 - r1 + 1, w = c2 - c1 + 1;
-        Mat outImageMat;
+        cv::Mat outImageMat;
         switch(channel) {
-                case 3: { outImageMat = Mat(Size(w, h), CV_8UC3); break; }
-                case 4: { outImageMat = Mat(Size(w, h), CV_16UC4); break; }
+                case 3: { outImageMat = cv::Mat(cv::Size(w, h), CV_8UC3); break; }
+                case 4: { outImageMat = cv::Mat(cv::Size(w, h), CV_16UC4); break; }
         }
         // write out image mat
         for(int y = 0; y < h; y++) {
                 for(int x = 0; x < w; x++) {
                         switch(channel) {
-                                case 3: { outImageMat.at<Vec3b>(y,x) = inImageMat.at<Vec3b>(y+r1,x+c1); break; }
-                                case 4: { outImageMat.at<Vec<uint16_t,4>>(y,x) = inImageMat.at<Vec<uint16_t,4>>(y+r1,x+c1); break; }
+                                case 3: { outImageMat.at<cv::Vec3b>(y,x) = inImageMat.at<cv::Vec3b>(y+r1,x+c1); break; }
+                                case 4: { outImageMat.at<cv::Vec<uint16_t,4>>(y,x) = inImageMat.at<cv::Vec<uint16_t,4>>(y+r1,x+c1); break; }
                         }
                 }
         }
 
         // write out image
-        imwrite( strcat(strcat(outImage, "."),ext2), outImageMat );
+        cv::imwrite( strcat(strcat(outImage, "."),ext2), outImageMat );
 
         // display in & out image
-        namedWindow( inImage, WINDOW_AUTOSIZE );
-        namedWindow( "trimmed image", WINDOW_AUTOSIZE );
+        namedWindow( inImage, cv::WINDOW_AUTOSIZE );
+        namedWindow( "trimmed image", cv::WINDOW_AUTOSIZE );
         imshow( inImage, inImageMat );
         imshow( "trimmed image", outImageMat );
-        waitKey(0);
+        cv::waitKey(0);
         return 0;
 }

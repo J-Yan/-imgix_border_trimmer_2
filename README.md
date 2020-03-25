@@ -37,6 +37,7 @@ In both approaches, use "libmagic" to detect the image type by the magic number 
 | png_i | png | 16UC4 | |Taken by myself|
 | png_RGBA_i  |png | 16UC4|Fully transparent border.|Taken by myself|
 | png_up_i |png | 16UC4|Only has top border.|Taken by myself|
+| png_w_jpeg_ext_i.jpeg | png | 16UC4 | With wrong file extension |Taken by myself|
 |webP_i|webp| 16UC4 | Border width is 0, don't have tool to edit (can edit it use OpenCV). Take as 0-width border teat case.|From Internet|
 
 ## Test case input and output images
@@ -52,25 +53,30 @@ jpeg_lr_i.jpeg (Border has noise)
 <img src="https://backto1995.com/temp_img/jpeg_lr_o.jpeg" width="30%"/>
 <img src="https://backto1995.com/temp_img/jpeg_lr_o_cv.jpeg" width="30%"/>  
 
-png_8_i.jpeg  
+png_8_i.png  
 <img src="https://backto1995.com/temp_img/png_8_i.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_8_o.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_8_o_cv.png" width="30%"/>  
 
-png_i.jpeg  
+png_i.png  
 <img src="https://backto1995.com/temp_img/png_i.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_o.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_o_cv.png" width="30%"/>  
 
-png_RGBA_i.jpeg  
+png_RGBA_i.png  
 <img src="https://backto1995.com/temp_img/png_RGBA_i.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_RGBA_o.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_RGBA_o_cv.png" width="30%"/>  
 
-png_up_i.jpeg  
+png_up_i.png  
 <img src="https://backto1995.com/temp_img/png_up_i.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_up_o.png" width="30%"/>
 <img src="https://backto1995.com/temp_img/png_up_o_cv.png" width="30%"/>  
+
+png_w_jpeg_ext_i.jpeg  
+<img src="https://backto1995.com/temp_img/png_w_jpeg_ext_i.jpeg" width="30%"/>
+<img src="https://backto1995.com/temp_img/png_w_jpeg_ext_o.png" width="30%"/>
+<img src="https://backto1995.com/temp_img/png_w_jpeg_ext_o_cv.png" width="30%"/>  
 
 webP_i.jpeg  
 <img src="https://backto1995.com/temp_img/webP_i.webp" width="30%"/>
@@ -92,6 +98,7 @@ clang++ -lz -lpng16 -lmagic -ljpeg borderTrimmer.cpp
 ./a.out png_i.png png_o.png
 ./a.out png_RGBA_i.png png_RGBA_o.png
 ./a.out png_up_i.png png_up_o.png
+./a.out png_w_jpeg_ext_i.jpeg png_w_jpeg_ext_o.png
 ```
 #### borderTrimmer_cv.cpp
 ```
@@ -103,6 +110,7 @@ g++ $(pkg-config --cflags --libs opencv4)  -lmagic -std=c++11 borderTrimmer_cv.c
 ./cv.out png_i.png png_o_cv
 ./cv.out png_RGBA_i.png png_RGBA_o_cv
 ./cv.out png_up_i.png png_up_o_cv
+./cv.out png_w_jpeg_ext_i.jpeg png_w_jpeg_ext_o_cv
 ./cv.out webP_i.webp webP_o_cv
 ```
 
