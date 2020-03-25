@@ -102,6 +102,7 @@ clang++ -lz -lpng16 -lmagic -ljpeg borderTrimmer.cpp
 ./a.out png_RGBA_i.png png_RGBA_o.png
 ./a.out png_up_i.png png_up_o.png
 ./a.out png_w_jpeg_ext_i.jpeg png_w_jpeg_ext_o.png
+./a.out pure.png pure_o.png
 ```
 #### borderTrimmer_cv.cpp
 ```
@@ -115,6 +116,7 @@ g++ $(pkg-config --cflags --libs opencv4)  -lmagic -std=c++11 borderTrimmer_cv.c
 ./cv.out png_up_i.png png_up_o_cv
 ./cv.out png_w_jpeg_ext_i.jpeg png_w_jpeg_ext_o_cv
 ./cv.out webP_i.webp webP_o_cv
+./cv.out pure.png pure_o_cv
 ```
 
 ## Links and credits
