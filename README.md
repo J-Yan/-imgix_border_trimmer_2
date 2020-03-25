@@ -83,6 +83,8 @@ webP_i.webp
 <img src="https://backto1995.com/temp_img/webP_o.webp" width="30%"/>
 <img src="https://backto1995.com/temp_img/webP_o_cv.webp" width="30%"/>  
 
+pure.png  
+<img src="https://backto1995.com/temp_img/pure.png" width="30%"/>Do not have output.  
 ## How to run
 on MacOS
 #### borderTrimmer.cpp
