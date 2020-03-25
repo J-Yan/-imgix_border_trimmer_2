@@ -11,7 +11,7 @@
 
 #include <magic.h>
 
-std::string type2str(int type, int * channel) {
+std::string type2str(int type, int * channel, int * dep) {
 /*
         code modified from https://stackoverflow.com/questions/10167534/how-to-find-out-what-type-of-a-mat-object-is-with-mattype-in-opencv/39780825
         int type: cv::Mat.type()
@@ -23,7 +23,7 @@ std::string type2str(int type, int * channel) {
         switch ( depth ) {
                 case CV_8U:  r = "8U"; break;
                 case CV_8S:  r = "8S"; break;
-                case CV_16U: r = "16U"; break;
+                case CV_16U: r = "16U"; *dep = 16; break;
                 case CV_16S: r = "16S"; break;
                 case CV_32S: r = "32S"; break;
                 case CV_32F: r = "32F"; break;
@@ -64,7 +64,8 @@ int main( int argc, char ** argv ) {
 
         char * inImage { argv[1] };
         char * outImage { argv[2] };
-        int channel ;
+        int channel {3};
+        int dep {8};
 
         // read image
         cv::Mat inImageMat;
@@ -87,7 +88,7 @@ int main( int argc, char ** argv ) {
         // trim process
 
         // check image opencv data type & image size
-        std::string ty { type2str( inImageMat.type(), &channel) };
+        std::string ty { type2str( inImageMat.type(), &channel, &dep) };
         printf("【OpenCV data type】%s\n【size】%dx%d \n-------------------\n【ROI info】\n", ty.c_str(), inImageMat.cols, inImageMat.rows );
 
         int r1 {0}, r2 {0}, c1 {0}, c2 {0};
@@ -98,13 +99,15 @@ int main( int argc, char ** argv ) {
                 for(int x = 0; x < inImageMat.cols; x++) {
                         bool same {true};
                         switch(channel){
-                                case 3: { same = inImageMat.at<cv::Vec3b>(y,x) == inImageMat.at<cv::Vec3b>(0,0); break; }
+                                case 3: {
+                                        if(dep == 16) {same = inImageMat.at<cv::Vec<uint16_t,3>>(y,x) == inImageMat.at<cv::Vec<uint16_t,3>>(0,0);}
+                                        else {same = inImageMat.at<cv::Vec3b>(y,x) == inImageMat.at<cv::Vec3b>(0,0);}
+                                        break; }
                                 case 4: { same = inImageMat.at<cv::Vec<uint16_t,4>>(y,x) == inImageMat.at<cv::Vec<uint16_t,4>>(0,0); break; }
                         }
                         if(!same){
                                 r1 = y;
                                 printf("top: %d\n", r1);
-                                std::cout<<x<<"   "<<y<<"   "<<inImageMat.at<cv::Vec3b>(y,x)<<"  "<<inImageMat.at<cv::Vec3b>(0,0);
                                 flag = false;
                                 break;
                         }
