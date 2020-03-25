@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
+#include <string.h> // strtok
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -13,24 +14,14 @@
 using namespace cv;
 using namespace std;
 
-// defined const can be overwritten, the compiler won't tell you
-// #define RGB 3
-// #define RGBA 4
-// #define ONE 1
-const int RGB = 3;
-const int RGBA = 4;
-const int ONE = 1;
-
-int channel;
-
-string type2str(int type) {
+string type2str(int type, int * channel) {
 /*
         code modified from https://stackoverflow.com/questions/10167534/how-to-find-out-what-type-of-a-mat-object-is-with-mattype-in-opencv/39780825
         int type: cv::Mat.type()
 */
         string r;
-        uchar depth = type & CV_MAT_DEPTH_MASK;
-        uchar chans = 1 + (type >> CV_CN_SHIFT);
+        uchar depth = type & CV_MAT_DEPTH_MASK; //
+        uchar chans = 1 + (type >> CV_CN_SHIFT);  // CV_CN_SHIFT 3
 
         switch ( depth ) {
                 case CV_8U:  r = "8U"; break;
@@ -45,16 +36,16 @@ string type2str(int type) {
 
         r += "C";
         r += (chans+'0');
-        channel = chans;
+        *channel = chans;
 
         return r;
 }
 
-const char * read_MIME_type(char *filename) {
+const char * read_MIME_type(char * filename) {
 /*
         Multipurpose Internet Mail Extensions
 */
-        magic_t handle = magic_open(MAGIC_MIME);
+        magic_t handle { magic_open(MAGIC_MIME) };
         if (handle == NULL) {
                 printf("unable to initialize magic library\n");
                 abort();
@@ -64,26 +55,28 @@ const char * read_MIME_type(char *filename) {
                 magic_close(handle);
                 abort();
         }
-        const char * type = magic_file(handle, filename);
+        const char * type { magic_file(handle, filename) };
         // image/png
         // image/jpeg
         // image/webp
-        std::printf("【TYPE】%s\n", type);
+        std::printf("【MIME】%s\n", type);
         return type;
 }
 
-int main( int argc, char** argv ) {
+int main( int argc, char ** argv ) {
 
-        char* inImage = argv[1];
-        char* outImage = argv[2];
+        char * inImage { argv[1] };
+        char * outImage { argv[2] };
+        int channel ;
 
         // read image
         Mat inImageMat;
 
-        const char * ext = read_MIME_type(argv[1]);
-        // if(strstr(ext, "png") || strstr(ext, "webp")) {inImageMat = imread( inImage, -1 ); channel = RGBA;}
-        if(strstr(ext, "png") || strstr(ext, "webp")) {inImageMat = imread( inImage, -1 ); }
-        else if(strstr(ext, "jpeg")) {inImageMat = imread( inImage, 1 );}
+        const char * ext { read_MIME_type(argv[1]) };
+        char * ext2 { strtok((char *)ext, "/;") };
+        ext2 = strtok(NULL, "/;");
+        printf("【Image type】%s\n", ext2);
+        if((string)ext2 == "png" || (string)ext2 == "webp" || (string)ext2 == "jpeg") {inImageMat = imread( inImage, -1 ); /* -1: cv::IMREAD_UNCHANGED*/}
         else {
                 cout << "File format not supported." << endl;
                 abort();
@@ -97,16 +90,16 @@ int main( int argc, char** argv ) {
         // trim process
 
         // check image opencv data type & image size
-        string ty =  type2str( inImageMat.type() );
-        printf("Input image info: %s %dx%d \n", ty.c_str(), inImageMat.cols, inImageMat.rows );
+        string ty { type2str( inImageMat.type(), &channel) };
+        printf("【OpenCV data type】%s\n【size】%dx%d \n-------------------\n【ROI info】\n", ty.c_str(), inImageMat.cols, inImageMat.rows );
 
         int r1, r2, c1, c2;
         // take inImageMat.at<Vec3b>(0,0) as border RGB
         // top border
-        bool flag = true;
+        bool flag {true};
         for(int y = 0; y < inImageMat.rows; y++) {
                 for(int x = 0; x < inImageMat.cols; x++) {
-                        bool same = true;
+                        bool same {true};
                         switch(channel){
                                 case 3: { same = inImageMat.at<Vec3b>(y,x) == inImageMat.at<Vec3b>(0,0); break; }
                                 case 4: { same = inImageMat.at<Vec<uint16_t,4>>(y,x) == inImageMat.at<Vec<uint16_t,4>>(0,0); break; }
@@ -123,7 +116,7 @@ int main( int argc, char** argv ) {
         // bottom border
         for(int y = inImageMat.rows-1; y >= 0; y--) {
                 for(int x = 0; x < inImageMat.cols; x++) {
-                        bool same = true;
+                        bool same {true};
                         switch(channel){
                                 case 3: { same = inImageMat.at<Vec3b>(y,x) == inImageMat.at<Vec3b>(0,0); break; }
                                 case 4:  { same = inImageMat.at<Vec<uint16_t,4>>(y,x) == inImageMat.at<Vec<uint16_t,4>>(0,0); break; }
@@ -190,7 +183,7 @@ int main( int argc, char** argv ) {
         }
 
         // write out image
-        imwrite( outImage, outImageMat );
+        imwrite( strcat(strcat(outImage, "."),ext2), outImageMat );
 
         // display in & out image
         namedWindow( inImage, WINDOW_AUTOSIZE );
