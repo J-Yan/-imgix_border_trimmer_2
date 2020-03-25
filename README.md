@@ -39,6 +39,7 @@ In both approaches, use "libmagic" to detect the image type by the magic number 
 | png_up_i |png | 16UC4|Only has top border.|Taken by myself|
 | png_w_jpeg_ext_i.jpeg | png | 16UC4 | With wrong file extension |Taken by myself|
 |webP_i|webp| 16UC4 | Border width is 0, don't have tool to edit (can edit it use OpenCV). Take as 0-width border teat case.|From Internet|
+| pure |  png | 16UC4 | Do not have output.  |Taken by myself|
 
 ## Test case input and output images
 [ origin, lib output, opencv output ]  

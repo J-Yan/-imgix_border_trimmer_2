@@ -73,7 +73,7 @@ int main( int argc, char ** argv ) {
         char * ext2 { strtok((char *)ext, "/;") };
         ext2 = strtok(NULL, "/;");
         printf("【Image type】%s\n", ext2);
-        if((std::string)ext2 == "png" || (std::string)ext2 == "webp" || (std::string)ext2 == "jpeg") {inImageMat = cv::imread( inImage, 1 ); /* -1: cv::IMREAD_UNCHANGED*/}
+        if((std::string)ext2 == "png" || (std::string)ext2 == "webp" || (std::string)ext2 == "jpeg") {inImageMat = cv::imread( inImage, -1 ); /* -1: cv::IMREAD_UNCHANGED*/}
         else {
                 std::cout << "File format not supported." << std::endl;
                 abort();
