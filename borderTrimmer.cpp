@@ -251,7 +251,7 @@ void process_image() {
 
         // up border
         bool flag = true;
-        int r1, r2, c1, c2; // top row, bottom row, left col, right col
+        int r1 {0}, r2 {0}, c1 {0}, c2 {0}; // top row, bottom row, left col, right col
         for(int y = 0; y < height; y++) {
                 png_bytep row = row_pointers[y];
                 for(int x = 0; x < width; x++) {
@@ -261,6 +261,10 @@ void process_image() {
                                 std::printf("top: %d\n", r1);
                                 flag = false;
                                 break;
+                        }
+                        if(y == height - 1 && x == width - 1) {
+                                printf("Input image is a pure color image, NOT qualified for this trimming process!");
+                                abort();
                         }
                 }
                 if(!flag) { flag = true; break; }

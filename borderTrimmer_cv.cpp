@@ -73,7 +73,7 @@ int main( int argc, char ** argv ) {
         char * ext2 { strtok((char *)ext, "/;") };
         ext2 = strtok(NULL, "/;");
         printf("【Image type】%s\n", ext2);
-        if((std::string)ext2 == "png" || (std::string)ext2 == "webp" || (std::string)ext2 == "jpeg") {inImageMat = cv::imread( inImage, -1 ); /* -1: cv::IMREAD_UNCHANGED*/}
+        if((std::string)ext2 == "png" || (std::string)ext2 == "webp" || (std::string)ext2 == "jpeg") {inImageMat = cv::imread( inImage, 1 ); /* -1: cv::IMREAD_UNCHANGED*/}
         else {
                 std::cout << "File format not supported." << std::endl;
                 abort();
@@ -90,7 +90,7 @@ int main( int argc, char ** argv ) {
         std::string ty { type2str( inImageMat.type(), &channel) };
         printf("【OpenCV data type】%s\n【size】%dx%d \n-------------------\n【ROI info】\n", ty.c_str(), inImageMat.cols, inImageMat.rows );
 
-        int r1, r2, c1, c2;
+        int r1 {0}, r2 {0}, c1 {0}, c2 {0};
         // take inImageMat.at<Vec3b>(0,0) as border RGB
         // top border
         bool flag {true};
@@ -104,11 +104,17 @@ int main( int argc, char ** argv ) {
                         if(!same){
                                 r1 = y;
                                 printf("top: %d\n", r1);
+                                std::cout<<x<<"   "<<y<<"   "<<inImageMat.at<cv::Vec3b>(y,x)<<"  "<<inImageMat.at<cv::Vec3b>(0,0);
                                 flag = false;
                                 break;
                         }
+                        if(y == inImageMat.rows - 1 && x == inImageMat.cols - 1) {
+                                printf("Input image is a pure color image, NOT qualified for this trimming process!");
+                                abort();
+                        }
                 }
                 if(!flag) { flag = true; break; }
+
         }
         // bottom border
         for(int y = inImageMat.rows-1; y >= 0; y--) {
